@@ -226,7 +226,7 @@ zip_close(struct zip *za)
 	    cd->entry[j].comment_len = za->entry[i].ch_comment_len;
 	}
 
-	cd->entry[j].offset = ftello(out);
+	cd->entry[j].offset = (unsigned int)ftello(out);
 
 	if (ZIP_ENTRY_DATA_CHANGED(za->entry+i) || new_torrentzip) {
 	    struct zip_source *zs;
@@ -370,8 +370,8 @@ add_data(struct zip *za, struct zip_source *zs, struct zip_dirent *de, FILE *ft)
     de->last_mod = st.mtime;
     de->comp_method = st.comp_method;
     de->crc = st.crc;
-    de->uncomp_size = st.size;
-    de->comp_size = st.comp_size;
+    de->uncomp_size = (unsigned int)st.size;
+    de->comp_size = (unsigned int)st.comp_size;
 
     if (zip_get_archive_flag(za, ZIP_AFL_TORRENT, 0))
 	_zip_dirent_torrent_normalize(de);
@@ -526,7 +526,7 @@ copy_data(FILE *fs, off_t len, FILE *ft, struct zip_error *error)
 	return 0;
 
     while (len > 0) {
-	nn = len > sizeof(buf) ? sizeof(buf) : len;
+	nn = len > sizeof(buf) ? sizeof(buf) : (int)len;
 	if ((n=fread(buf, 1, nn, fs)) < 0) {
 	    _zip_error_set(error, ZIP_ER_READ, errno);
 	    return -1;

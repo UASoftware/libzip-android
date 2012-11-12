@@ -128,7 +128,7 @@ read_zip(void *state, void *data, size_t len, enum zip_source_cmd cmd)
     switch (cmd) {
     case ZIP_SOURCE_OPEN:
 	for (n=0; n<z->off; n+= i) {
-	    i = (z->off-n > sizeof(b) ? sizeof(b) : z->off-n);
+	    i = (z->off-n > sizeof(b) ? sizeof(b) : (int)z->off-n);
 	    if ((i=zip_fread(z->zf, b, i)) < 0) {
 		zip_fclose(z->zf);
 		z->zf = NULL;
@@ -139,9 +139,9 @@ read_zip(void *state, void *data, size_t len, enum zip_source_cmd cmd)
 	
     case ZIP_SOURCE_READ:
 	if (z->len != -1)
-	    n = len > z->len ? z->len : len;
+	    n = len > z->len ? (int)z->len : (int)len;
 	else
-	    n = len;
+	    n = (int)len;
 	
 
 	if ((i=zip_fread(z->zf, buf, n)) < 0)
