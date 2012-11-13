@@ -47,6 +47,8 @@
 #include <io.h>
 #define close(f) _close(f)
 #define rename(s, d) (MoveFileExA((s), (d), MOVEFILE_REPLACE_EXISTING) ? 0 : -1)
+#define strcasecmp _stricmp
+#define snprintf _snprintf
 #endif
 
 static int add_data(struct zip *, struct zip_source *, struct zip_dirent *,
