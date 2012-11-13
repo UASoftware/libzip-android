@@ -37,7 +37,9 @@
 
 #include "zipint.h"
 
-
+#ifdef _WIN32
+#define strcasecmp _stricmp
+#endif
 
 ZIP_EXTERN int
 zip_name_locate(struct zip *za, const char *fname, int flags)

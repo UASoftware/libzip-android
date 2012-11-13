@@ -36,12 +36,16 @@
 
 #include <zlib.h>
 
-#ifdef _MSC_VER
-#define ZIP_EXTERN __declspec(dllimport)
+#ifdef _WIN32
+#define ZIP_EXTERN __declspec(dllexport)
+/* for dup(), close(), etc. */
+#include <io.h>
 #endif
 
 #include "zip.h"
+#ifndef _WIN32
 #include "config.h"
+#endif
 
 #ifndef HAVE_MKSTEMP
 int _zip_mkstemp(char *);

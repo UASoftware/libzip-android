@@ -41,6 +41,9 @@
 #include "zipint.h"
 
 
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 ZIP_EXTERN int
 zip_error_to_str(char *buf, size_t len, int ze, int se)

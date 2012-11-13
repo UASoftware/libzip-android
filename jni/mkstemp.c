@@ -42,13 +42,42 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#include <io.h>
+#define mode_t int
+#define S_ISREG(m) (((m)&_S_IFMT) == _S_IFREG)
+#define S_ISDIR(m) (((m)&_S_IFMT) == _S_IFDIR)
+#define mkdir _mkdir
+#define S_IRUSR  (_S_IREAD)
+#define S_IWUSR  (_S_IWRITE)
+#define ssize_t  SSIZE_T
+/*
+#define open _open
+*/
+#undef min
+#define min _cpp_min
+#undef max
+#define max _cpp_max
+#else
 #include <unistd.h>
+#endif
 
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
 
 
+
+#ifdef _WIN32
+#include <io.h>
+#include <process.h>
+#define getpid() _getpid()
+typedef int pid_t;
+#define S_ISDIR(m) (((m) & (_S_IFMT)) == (_S_IFDIR))
+#define open(p, f, m) _open((p), ((f) | _O_BINARY), _S_IREAD | _S_IWRITE)
+#endif
 
 int
 _zip_mkstemp(char *path)
