@@ -75,7 +75,7 @@
 #include <process.h>
 #define getpid() _getpid()
 typedef int pid_t;
-#define S_ISDIR(m) (((m) & (_S_IFMT)) == (_S_IFDIR))
+//#define S_ISDIR(m) (((m) & (_S_IFMT)) == (_S_IFDIR))
 #define open(p, f, m) _open((p), ((f) | _O_BINARY), _S_IREAD | _S_IWRITE)
 #endif
 
@@ -90,7 +90,7 @@ _zip_mkstemp(char *path)
 	/* To guarantee multiple calls generate unique names even if
 	   the file is not created. 676 different possibilities with 7
 	   or more X's, 26 with 6 or less. */
-	static char xtra[2] = "aa";
+	static char xtra[2] = {'a', 'a'};
 	int xcnt = 0;
 
 	pid = getpid();
